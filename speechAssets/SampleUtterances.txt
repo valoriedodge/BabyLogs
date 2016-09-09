@@ -1,0 +1,58 @@
+AddChildIntent add {ChildName}
+AddChildIntent add child {ChildName}
+AddChildIntent add baby {ChildName}
+AddChildIntent keep logs for {ChildName}
+AddChildIntent keep records for {ChildName}
+AddChildIntent add {ChildName} to the logs
+AddChildIntent add {ChildName} to the records
+
+AddSleepIntent {ChildName} went to sleep
+AddSleepIntent {ChildName} went to bed
+AddSleepIntent {ChildName} fell sleep
+AddSleepIntent {ChildName} is sleeping
+AddSleepIntent {ChildName} is napping
+AddSleepIntent {ChildName} took a nap
+AddSleepIntent I just put {ChildName} down
+AddSleepIntent I just put {ChildName} down for a nap
+AddSleepIntent I just put {ChildName} down for bed
+AddSleepIntent I just put {ChildName} to bed
+AddSleepIntent I just put {ChildName} in bed
+AddSleepIntent I just put {ChildName} to sleep
+AddSleepIntent I just laid {ChildName} down
+AddSleepIntent I just laid {ChildName} down for a nap
+AddSleepIntent I just laid {ChildName} down for bed
+AddSleepIntent I just laid {ChildName} in bed
+AddSleepIntent {ChildName} went down for a nap
+AddSleepIntent {ChildName} went down to bed
+
+TellLastSleepIntent when did {ChildName} go down
+TellLastSleepIntent when did {ChildName} go down for a nap
+TellLastSleepIntent when did {ChildName} go to sleep
+TellLastSleepIntent when did {ChildName} go to bed
+TellLastSleepIntent how long has {ChildName} been sleeping
+TellLastSleepIntent how long has {ChildName} been napping
+TellLastSleepIntent how long has {ChildName} been asleep
+TellLastSleepIntent when was {ChildName} last nap
+TellLastSleepIntent what time did {ChildName} go to sleep
+TellLastSleepIntent what time did {ChildName} go to bed
+TellLastSleepIntent what time did {ChildName} go down
+TellLastSleepIntent what time did {ChildName} go down for a nap
+TellLastSleepIntent what time did {ChildName} go down to bed
+TellLastSleepIntent what time did {ChildName} go up to bed
+
+TellLastWakeIntent when did {ChildName} wake up
+TellLastWakeIntent when did {ChildName} wake up last
+
+HowLongAsleepIntent how long was {ChildName} napping
+HowLongAsleepIntent how long was {ChildName} sleeping
+HowLongAsleepIntent how long was the nap of {ChildName}
+HowLongAsleepIntent how long did {ChildName} sleep
+HowLongAsleepIntent how long did {ChildName} nap
+
+WakeUpIntent {ChildName} is awake
+WakeUpIntent {ChildName} woke up
+WakeUpIntent {ChildName} woke up from his nap
+WakeUpIntent {ChildName} woke up from her nap
+WakeUpIntent {ChildName} woke up from their nap
+WakeUpIntent {ChildName} is not sleeping
+WakeUpIntent {ChildName} is no longer sleeping

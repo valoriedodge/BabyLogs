@@ -1,0 +1,92 @@
+{
+  "intents": [
+    {
+      "intent": "AddChildIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "AddSleepIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "TellLastSleepIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "TellLastWakeIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "HowLongAsleepIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "WakeUpIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "AddFeedingIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        },
+        {
+          "name": "NursingSide",
+          "type": "NURSING_SIDE"
+        }
+      ]
+    },
+    {
+      "intent": "StopFeedingIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "LastNapInfoIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
