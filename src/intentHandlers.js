@@ -70,7 +70,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
                 currentLogs.data.naps[childName][currentIndex] = newNapArray;
             }
 
-            speechOutput += childName + " went to sleep at " + formatTime(currentTime) + ' has been logged. You can also log when ' + childName + ' wakes up to track the length of the sleep time. ';
+            speechOutput += childName + " went to sleep at " + formatTime(currentTime) + ' has been added. You can also log when ' + childName + ' wakes up to track the length of the sleep time. ';
 
             currentLogs.save(function () {
                 response.tell(speechOutput);
@@ -106,10 +106,52 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             lastSleep = currentLogs.data.naps[childName][currentIndex][0];
             // console.log(lastSleep);
             var lastSleepTime = formatTime(new Date(lastSleep));
-            var timeDifference = getTimeDifference(new Date(lastSleep), new Date(currentTime));
+            var timeDifference = getTimeDifference(new Date(lastSleep), currentTime);
             var lastSleepTimePassed = formatTimeDifference(timeDifference);
 
             speechOutput += childName + " went to sleep at " + lastSleepTime + ' ' + lastSleepTimePassed + ' ago. ';
+
+            currentLogs.save(function () {
+                response.tell(speechOutput);
+            });
+        });
+    };
+
+    intentHandlers.TellLastWakeIntent = function (intent, session, response) {
+        //log when a child goes down for a nap, ask additional question if slot values are missing.
+        var childName = intent.slots.ChildName.value;
+        if (!childName) {
+            response.ask('sorry, I did not hear the child\'s name, please say that again', 'Please say the name again');
+            return;
+        }
+
+        storage.loadLogs(session, function (currentLogs) {
+            var speechOutput = '', currentTime = new Date(), currentIndex, lastWake;
+            //check to see if child's name has been added to account
+            //if not currently in account return to user to avoid multiple mis-entries
+            if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
+                response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
+                return;
+            }
+            //check for sleep activity from DB, if no data return to user
+            if (!currentLogs.data.naps || !currentLogs.data.naps[childName] || !currentLogs.data.naps[childName][0]) {
+                response.ask('Sorry, I do not have any sleep activity logged for ' + childName + '. What would you like to do?', childName + ' does not have any sleep activity logged. What would you like to do?');
+                return;
+            }
+
+            //otherwise get last logged sleep datetime object and format for output
+            currentIndex = currentLogs.data.naps[childName].length -1;
+            if (!currentLogs.data.naps[childName][currentIndex][1]) {
+                response.ask('Sorry, I do not have a wake up time logged for ' + childName + ' for the last sleep recorded. What would you like to do?', childName + ' does not have a wake up time logged for the last sleep. What would you like to do?');
+                return;
+            }
+            lastWake = currentLogs.data.naps[childName][currentIndex][1];
+            // console.log(lastSleep);
+            var lastWakeTime = formatTime(new Date(lastWake));
+            var timeDifference = getTimeDifference(new Date(lastWake), currentTime);
+            var lastWakeTimePassed = formatTimeDifference(timeDifference);
+
+            speechOutput += childName + " woke up at " + lastWakeTime + ' ' + lastWakeTimePassed + ' ago. ';
 
             currentLogs.save(function () {
                 response.tell(speechOutput);
@@ -205,7 +247,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
 
           currentLogs.data.naps[childName][currentIndex][1] = currentTime;
           lastSleep = currentLogs.data.naps[childName][currentIndex][0];
-          var timePassed = getTimeDifference(new Date(lastSleep), new Date(currentTime));
+          var timePassed = getTimeDifference(new Date(lastSleep), currentTime);
           var sleepTimePassed = formatTimeDifference(timePassed);
 
           speechOutput += childName + " woke up at " + formatTime(currentTime) + ' sleeping for ' + sleepTimePassed + '. ';
@@ -218,13 +260,15 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
     intentHandlers.AddFeedingIntent = function (intent, session, response) {
         //log when a child goes down for a nap, ask additional question if slot values are missing.
         var childName = intent.slots.ChildName.value;
+        // var nursingSide = intent.slots.NursingSide.value;
+        // var feedingAmount = intent.slots.FeedingAmount.value;
         if (!childName) {
             response.ask('sorry, I did not hear the child\'s name, please say that again', 'Please say the name again');
             return;
         }
 
         storage.loadLogs(session, function (currentLogs) {
-            var speechOutput = '', currentTime = new Date(), newNapArray = [], currentIndex;
+            var speechOutput = '', currentTime = new Date(), newFeedingArray = [], currentIndex;
             //check to see if child's name has been added to account
             //if not currently in account return to user to avoid multiple mis-entries
             if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
@@ -234,23 +278,25 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             if (!currentLogs.data.feedings[childName]) {
                 currentLogs.data.feedings[childName] = [];
                 newFeedingArray[0] = currentTime;
-                currentLogs.data.feedings[childName][0] = newNapArray;
+                currentLogs.data.feedings[childName][0] = newFeedingArray;
             } else {
                 currentIndex = currentLogs.data.feedings[childName].length;
                 newFeedingArray[0] = currentTime;
                 currentLogs.data.feedings[childName][currentIndex] = [];
-                currentLogs.data.feedings[childName][currentIndex] = newNapArray;
+                currentLogs.data.feedings[childName][currentIndex] = newFeedingArray;
             }
 
-            speechOutput += childName + " went to sleep at " + formatTime(currentTime) + ' has been logged. You can also log when ' + childName + ' wakes up to track the length of the sleep time. ';
-
+            speechOutput += childName + " ate at " + formatTime(currentTime) + ' added. ';
+            if (currentLogs.data.feedings[childName].length < 2) {
+                speechOutput += 'If you are nursing, you can also log when ' + childName + ' stops eating to track the length of the feeding time. ';
+            }
             currentLogs.save(function () {
                 response.tell(speechOutput);
             });
         });
     };
 
-    intentHandlers.TellLastSleepIntent = function (intent, session, response) {
+    intentHandlers.TellLastFeedingIntent = function (intent, session, response) {
         //log when a child goes down for a nap, ask additional question if slot values are missing.
         var childName = intent.slots.ChildName.value;
         if (!childName) {
@@ -259,29 +305,29 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
         }
 
         storage.loadLogs(session, function (currentLogs) {
-            var speechOutput = '', currentTime = new Date(), currentIndex, lastSleep;
+            var speechOutput = '', currentTime = new Date(), currentIndex, lastFeeding;
             //check to see if child's name has been added to account
             //if not currently in account return to user to avoid multiple mis-entries
             if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
                 response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
                 return;
             }
-            //check for sleep activity from DB, if no data return to user
+            //check for feeding activity from DB, if no data return to user
             if (!currentLogs.data.feedings || !currentLogs.data.feedings[childName] || !currentLogs.data.feedings[childName][0]) {
-                response.ask('Sorry, I do not have any sleep activity logged for ' + childName + '. What would you like to do?', childName + ' does not have any sleep activity logged. What would you like to do?');
+                response.ask('Sorry, I do not have any feedings logged for ' + childName + '. What would you like to do?', childName + ' does not have any feedings logged. What would you like to do?');
                 return;
             }
 
-            //otherwise get last logged sleep datetime object and format for output
+            //otherwise get last logged feeding datetime object and format for output
             currentIndex = currentLogs.data.feedings[childName].length -1;
             // console.log(currentIndex);
-            lastSleep = currentLogs.data.feedings[childName][currentIndex][0];
-            // console.log(lastSleep);
-            var lastSleepTime = formatTime(new Date(lastSleep));
-            var timeDifference = getTimeDifference(new Date(lastSleep), new Date(currentTime));
-            var lastSleepTimePassed = formatTimeDifference(timeDifference);
+            lastFeeding = currentLogs.data.feedings[childName][currentIndex][0];
+            // console.log(lastFeeding);
+            var lastFeedingTime = formatTime(new Date(lastFeeding));
+            var timeDifference = getTimeDifference(new Date(lastFeeding), new Date(currentTime));
+            var lastFeedingTimePassed = formatTimeDifference(timeDifference);
 
-            speechOutput += childName + " went to sleep at " + lastSleepTime + ' ' + lastSleepTimePassed + ' ago. ';
+            speechOutput += childName + " ate at " + lastFeedingTime + ' ' + lastFeedingTimePassed + ' ago. ';
 
             currentLogs.save(function () {
                 response.tell(speechOutput);
@@ -289,7 +335,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
         });
     };
 
-    intentHandlers.HowLongAsleepIntent = function (intent, session, response) {
+    intentHandlers.HowLongFeedingIntent = function (intent, session, response) {
       //log when a child goes down for a nap, ask additional question if slot values are missing.
       var childName = intent.slots.ChildName.value;
       if (!childName) {
@@ -305,29 +351,29 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
               response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
               return;
           }
-          //check for sleep activity from DB, if no data return to user
+          //check for feeding activity from DB, if no data return to user
           if (!currentLogs.data.feedings || !currentLogs.data.feedings[childName] || !currentLogs.data.feedings[childName][0]) {
-              response.ask('Sorry, I do not have any sleep activity logged for ' + childName + '. What would you like to do?', childName + ' does not have any sleep activity logged. What would you like to do?');
+              response.ask('Sorry, I do not have any feedings logged for ' + childName + '. What would you like to do?', childName + ' does not have any feedings logged. What would you like to do?');
               return;
           }
-          //otherwise get last logged sleep datetime object
+          //otherwise get last logged feeding datetime object
           currentIndex = currentLogs.data.feedings[childName].length - 1;
 
-          //Check to see if the last sleep entered already has a corresponding wake up event
+          //Check to see if the last feedin entered already has a corresponding wake up event
           if (!currentLogs.data.feedings[childName][currentIndex][0] || !currentLogs.data.feedings[childName][currentIndex][1]) {
               var lastLog = currentLogs.data.feedings[childName][currentIndex][0];
               var temp = formatDate(new Date(lastLog)) + ' ' + formatTime(new Date(lastLog));
-              response.ask('Sorry, I do not have a wake up time for ' +  childName + ' for the last sleep recorded. Last activity was recorded ' + temp + '. What would you like to do?', childName + ' does not have a wake up time recorded for the last recorded sleep. What would you like to do?');
+              response.ask('Sorry, I do not know when you stopped feeding ' +  childName + ' for the last feeding recorded. Last activity was recorded ' + temp + '. What would you like to do?', childName + ' does not have a stopped eating time recorded for the last recorded feeding. What would you like to do?');
               return;
           }
 
-          //Find time difference between last wake time and last sleep time and format output
-          var lastSleep = currentLogs.data.feedings[childName][currentIndex][0];
-          var lastWake = currentLogs.data.feedings[childName][currentIndex][1];
-          var timePassed = getTimeDifference(new Date(lastSleep), new Date(lastWake));
-          var sleepTimePassed = formatTimeDifference(timePassed);
+          //Find time difference between last stop feeding time and last start feeding time and format output
+          var lastFeeding = currentLogs.data.feedings[childName][currentIndex][0];
+          var lastStoppedFeeding = currentLogs.data.feedings[childName][currentIndex][1];
+          var timePassed = getTimeDifference(new Date(lastFeeding), new Date(lastStoppedFeeding));
+          var feedingTimePassed = formatTimeDifference(timePassed);
 
-          speechOutput += childName + ' slept for ' + sleepTimePassed + '. ';
+          speechOutput += childName + ' ate for ' + feedingTimePassed + ' at ' + formatTime(new Date(lastFeeding));
 
           currentLogs.save(function () {
               response.tell(speechOutput);
@@ -335,7 +381,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
        });
     };
 
-    intentHandlers.WakeUpIntent = function (intent, session, response) {
+    intentHandlers.StopFeedingIntent = function (intent, session, response) {
       //log when a child goes down for a nap, ask additional question if slot values are missing.
       var childName = intent.slots.ChildName.value;
       if (!childName) {
@@ -344,43 +390,43 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
       }
 
       storage.loadLogs(session, function (currentLogs) {
-          var speechOutput = '', currentTime = new Date(), currentIndex, lastSleep, sleepArray;
+          var speechOutput = '', currentTime = new Date(), currentIndex, lastFeeding, feedingArray;
           //check to see if child's name has been added to account
           //if not currently in account return to user to avoid multiple mis-entries
           if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
               response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
               return;
           }
-          //check for sleep activity from DB, if no data return to user
+          //check for feeding activity from DB, if no data return to user
           if (!currentLogs.data.feedings || !currentLogs.data.feedings[childName] || !currentLogs.data.feedings[childName][0]) {
-              response.ask('Sorry, I do not have any sleep activity logged for ' + childName + '. What would you like to do?', childName + ' does not have any sleep activity logged. What would you like to do?');
+              response.ask('Sorry, I do not have any feedings logged for ' + childName + '. What would you like to do?', childName + ' does not have any feedings logged. What would you like to do?');
               return;
           }
 
-          //otherwise get last logged sleep datetime object
+          //otherwise get last logged feeding datetime object
           currentIndex = currentLogs.data.feedings[childName].length - 1;
 
           if (!currentLogs.data.feedings[childName][currentIndex][0]) {
-              response.ask('Sorry, I do not have any sleep activity logged for ' + childName + '. What would you like to do?', childName + ' does not have any sleep activity logged. What would you like to do?');
+              response.ask('Sorry, I do not have any feedings logged for ' + childName + '. What would you like to do?', childName + ' does not have any feedings logged. What would you like to do?');
               return;
           }
 
-          //Check to see if the last sleep entered already has a corresponding wake up event
+          //Check to see if the last feeding entered already has a corresponding stop feeding recorded
           if (currentLogs.data.feedings[childName][currentIndex][0] && currentLogs.data.feedings[childName][currentIndex][1]) {
               var lastLog = currentLogs.data.feedings[childName][currentIndex][1];
               var temp = formatDate(new Date(lastLog)) + ' ' + formatTime(new Date(lastLog));
-              response.ask('Sorry, I do not have any new sleep activity logged for ' + childName + '. Last activity was logged ' + temp + '. What would you like to do?', childName + ' does not have any new sleep activity logged. What would you like to do?');
+              response.ask('Sorry, I do not have any new feedings logged for ' + childName + '. Last activity was logged ' + temp + '. What would you like to do?', childName + ' does not have any new feedings logged. What would you like to do?');
               return;
           }
 
-          //Set current time as wake time in nap array
+          //Set current time as stop feeding time in feedings array
 
           currentLogs.data.feedings[childName][currentIndex][1] = currentTime;
-          lastSleep = currentLogs.data.feedings[childName][currentIndex][0];
-          var timePassed = getTimeDifference(new Date(lastSleep), new Date(currentTime));
-          var sleepTimePassed = formatTimeDifference(timePassed);
+          lastFeeding = currentLogs.data.feedings[childName][currentIndex][0];
+          var timePassed = getTimeDifference(new Date(lastFeeding), currentTime);
+          var feedingTimePassed = formatTimeDifference(timePassed);
 
-          speechOutput += childName + " woke up at " + formatTime(currentTime) + ' sleeping for ' + sleepTimePassed + '. ';
+          speechOutput += childName + " woke up at " + formatTime(currentTime) + ' eating for ' + feedingTimePassed + '. ';
 
           currentLogs.save(function () {
               response.tell(speechOutput);

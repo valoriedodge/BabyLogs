@@ -62,8 +62,26 @@
           "type": "AMAZON.US_FIRST_NAME"
         },
         {
-          "name": "NursingSide",
-          "type": "NURSING_SIDE"
+          "name": "FeedingAmount",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "TellLastFeedingIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
+      "intent": "HowLongFeedingIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
         }
       ]
     },

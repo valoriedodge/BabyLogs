@@ -1,9 +1,11 @@
 AddChildIntent add {ChildName}
+AddChildIntent {ChildName}
 AddChildIntent add child {ChildName}
 AddChildIntent add baby {ChildName}
 AddChildIntent keep logs for {ChildName}
 AddChildIntent keep records for {ChildName}
 AddChildIntent add {ChildName} to the logs
+AddChildIntent add {ChildName} to the record
 AddChildIntent add {ChildName} to the records
 
 AddSleepIntent {ChildName} went to sleep
@@ -12,6 +14,7 @@ AddSleepIntent {ChildName} fell sleep
 AddSleepIntent {ChildName} is sleeping
 AddSleepIntent {ChildName} is napping
 AddSleepIntent {ChildName} took a nap
+AddSleepIntent {ChildName} just slept
 AddSleepIntent I just put {ChildName} down
 AddSleepIntent I just put {ChildName} down for a nap
 AddSleepIntent I just put {ChildName} down for bed
@@ -29,25 +32,54 @@ TellLastSleepIntent when did {ChildName} go down
 TellLastSleepIntent when did {ChildName} go down for a nap
 TellLastSleepIntent when did {ChildName} go to sleep
 TellLastSleepIntent when did {ChildName} go to bed
+TellLastSleepIntent when did {ChildName} last go down
+TellLastSleepIntent when did {ChildName} last go down for a nap
+TellLastSleepIntent when did {ChildName} last go to sleep
+TellLastSleepIntent when did {ChildName} last go to bed
+TellLastSleepIntent when did {ChildName} go down last
+TellLastSleepIntent when did {ChildName} go down for a nap last
+TellLastSleepIntent when did {ChildName} go to sleep last
+TellLastSleepIntent when did {ChildName} go to bed last
+TellLastSleepIntent how long ago did {ChildName} go down
+TellLastSleepIntent how long ago did {ChildName} go down for a nap
+TellLastSleepIntent how long ago did {ChildName} go to sleep
+TellLastSleepIntent how long ago did {ChildName} go to bed
 TellLastSleepIntent how long has {ChildName} been sleeping
 TellLastSleepIntent how long has {ChildName} been napping
 TellLastSleepIntent how long has {ChildName} been asleep
 TellLastSleepIntent when was {ChildName} last nap
+TellLastSleepIntent when was the last nap of {ChildName}
 TellLastSleepIntent what time did {ChildName} go to sleep
 TellLastSleepIntent what time did {ChildName} go to bed
 TellLastSleepIntent what time did {ChildName} go down
 TellLastSleepIntent what time did {ChildName} go down for a nap
 TellLastSleepIntent what time did {ChildName} go down to bed
 TellLastSleepIntent what time did {ChildName} go up to bed
+TellLastSleepIntent what time did {ChildName} go to sleep last
+TellLastSleepIntent what time did {ChildName} go to bed last
+TellLastSleepIntent what time did {ChildName} go down last
+TellLastSleepIntent what time did {ChildName} go down for a nap last
+TellLastSleepIntent what time did {ChildName} go down to bed last
+TellLastSleepIntent what time did {ChildName} go up to bed last
+TellLastSleepIntent what time {ChildName} went to sleep
+TellLastSleepIntent what time {ChildName} went to bed
+TellLastSleepIntent what time {ChildName} went down
+TellLastSleepIntent what time {ChildName} went down for a nap
+TellLastSleepIntent what time {ChildName} went down to bed
+TellLastSleepIntent what time {ChildName} went up to bed
 
 TellLastWakeIntent when did {ChildName} wake up
 TellLastWakeIntent when did {ChildName} wake up last
+TellLastWakeIntent when did {ChildName} last wake up
 
 HowLongAsleepIntent how long was {ChildName} napping
 HowLongAsleepIntent how long was {ChildName} sleeping
 HowLongAsleepIntent how long was the nap of {ChildName}
 HowLongAsleepIntent how long did {ChildName} sleep
 HowLongAsleepIntent how long did {ChildName} nap
+HowLongAsleepIntent how long was {ChildName} last nap
+HowLongAsleepIntent was the last nap of {ChildName}
+HowLongAsleepIntent how long did {ChildName} sleep last night
 
 WakeUpIntent {ChildName} is awake
 WakeUpIntent {ChildName} woke up
@@ -55,4 +87,110 @@ WakeUpIntent {ChildName} woke up from his nap
 WakeUpIntent {ChildName} woke up from her nap
 WakeUpIntent {ChildName} woke up from their nap
 WakeUpIntent {ChildName} is not sleeping
+WakeUpIntent {ChildName} is not sleeping anymore
 WakeUpIntent {ChildName} is no longer sleeping
+
+AddFeedingIntent {ChildName} ate
+AddFeedingIntent {ChildName} took a bottle
+AddFeedingIntent {ChildName} had a bottle
+AddFeedingIntent {ChildName} nursed
+AddFeedingIntent {ChildName} just ate
+AddFeedingIntent {ChildName} just took a bottle
+AddFeedingIntent {ChildName} just had a bottle
+AddFeedingIntent {ChildName} just nursed
+AddFeedingIntent {ChildName} is eating
+AddFeedingIntent {ChildName} is feeding
+AddFeedingIntent {ChildName} is nursing
+AddFeedingIntent {ChildName} is taking a bottle
+AddFeedingIntent {ChildName} is drinking a bottle
+AddFeedingIntent {ChildName} is having a bottle
+AddFeedingIntent I am nursing {ChildName}
+AddFeedingIntent I am feeding {ChildName}
+AddFeedingIntent I am feeding {ChildName} some food
+AddFeedingIntent I am feeding {ChildName} some formula
+AddFeedingIntent I am feeding {ChildName} a bottle
+AddFeedingIntent I am giving {ChildName} a bottle
+AddFeedingIntent I am giving {ChildName} some formula
+AddFeedingIntent I am giving {ChildName} some food
+AddFeedingIntent I am getting {ChildName} something to eat
+AddFeedingIntent I am getting {ChildName} some food
+AddFeedingIntent I am getting {ChildName} some formula
+AddFeedingIntent I'm nursing {ChildName}
+AddFeedingIntent I'm feeding {ChildName}
+AddFeedingIntent I'm feeding {ChildName} some food
+AddFeedingIntent I'm feeding {ChildName} some formula
+AddFeedingIntent I'm giving {ChildName} a bottle
+AddFeedingIntent I'm giving {ChildName} some formula
+AddFeedingIntent I'm giving {ChildName} some food
+AddFeedingIntent I'm getting {ChildName} something to eat
+AddFeedingIntent I'm getting {ChildName} some food
+AddFeedingIntent I'm getting {ChildName} some formula
+AddFeedingIntent I'm getting {ChildName} a bottle
+
+TellLastFeedingIntent when did I last nurse {ChildName}
+TellLastFeedingIntent when did I last feed {ChildName}
+TellLastFeedingIntent when did I nurse {ChildName}
+TellLastFeedingIntent when did I feed {ChildName}
+TellLastFeedingIntent when did I nurse {ChildName} last
+TellLastFeedingIntent when did I feed {ChildName} last
+TellLastFeedingIntent when did {ChildName} eat
+TellLastFeedingIntent when did {ChildName} nurse
+TellLastFeedingIntent when did {ChildName} take a bottle
+TellLastFeedingIntent when did {ChildName} have a bottle
+TellLastFeedingIntent when did {ChildName} last eat
+TellLastFeedingIntent when did {ChildName} last take a bottle
+TellLastFeedingIntent when did {ChildName} last have a bottle
+TellLastFeedingIntent when did {ChildName} last nurse
+TellLastFeedingIntent when did {ChildName} eat last
+TellLastFeedingIntent when did {ChildName} take a bottle last
+TellLastFeedingIntent when did {ChildName} have a bottle last
+TellLastFeedingIntent when did {ChildName} nurse last
+TellLastFeedingIntent how long ago did {ChildName} eat
+TellLastFeedingIntent how long ago did {ChildName} take a bottle
+TellLastFeedingIntent how long ago did {ChildName} have a bottle
+TellLastFeedingIntent how long ago did {ChildName} nurse
+TellLastFeedingIntent how long has {ChildName} been feeding
+TellLastFeedingIntent how long has {ChildName} been nursing
+TellLastFeedingIntent how long has {ChildName} been eating
+TellLastFeedingIntent when was {ChildName} last feeding
+TellLastFeedingIntent when was the last feeding of {ChildName}
+TellLastFeedingIntent when was the last nursing of {ChildName}
+TellLastFeedingIntent what time did {ChildName} eat
+TellLastFeedingIntent what time did {ChildName} nurse
+TellLastFeedingIntent what time did {ChildName} take a bottle
+TellLastFeedingIntent what time did {ChildName} have a bottle
+TellLastFeedingIntent what time did {ChildName} eat last
+TellLastFeedingIntent what time did {ChildName} nurse last
+TellLastFeedingIntent what time did {ChildName} take a bottle last
+TellLastFeedingIntent what time did {ChildName} have a bottle last
+TellLastFeedingIntent what time {ChildName} ate
+TellLastFeedingIntent what time {ChildName} nursed
+TellLastFeedingIntent what time {ChildName} took a bottle
+TellLastFeedingIntent what time {ChildName} had a bottle
+
+HowLongFeedingIntent how long was {ChildName} eating
+HowLongFeedingIntent how long was {ChildName} nursing
+HowLongFeedingIntent how long was the feeding of {ChildName}
+HowLongFeedingIntent how long did {ChildName} feed
+HowLongFeedingIntent how long did {ChildName} eat
+HowLongFeedingIntent how long did {ChildName} nurse
+HowLongFeedingIntent was the last feeding of {ChildName}
+HowLongFeedingIntent how long did {ChildName} nurse last time
+HowLongFeedingIntent how long did {ChildName} feed last time
+HowLongFeedingIntent how long did {ChildName} eat last time
+
+StopFeedingIntent {ChildName} stopped eating
+StopFeedingIntent {ChildName} stopped nursing
+StopFeedingIntent {ChildName} stopped drinking
+StopFeedingIntent {ChildName} stopped taking the bottle
+StopFeedingIntent {ChildName} stopped
+StopFeedingIntent {ChildName} is done
+StopFeedingIntent {ChildName} is done eating
+StopFeedingIntent {ChildName} is done nursing
+StopFeedingIntent {ChildName} is done taking the bottle
+StopFeedingIntent {ChildName} is done drinking the bottle
+StopFeedingIntent {ChildName} is not eating anymore
+StopFeedingIntent {ChildName} is not nursing anymore
+StopFeedingIntent {ChildName} is not drinking anymore
+StopFeedingIntent I am done feeding {ChildName}
+StopFeedingIntent I am done nursing {ChildName}

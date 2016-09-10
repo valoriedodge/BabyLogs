@@ -24,7 +24,8 @@ var storage = (function () {
             this.data = {
                 names: [],
                 naps: {},
-                feedings: {}
+                feedings: {},
+                diapers: {}
             };
         }
         this._session = session;
