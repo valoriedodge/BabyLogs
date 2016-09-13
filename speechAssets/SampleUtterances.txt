@@ -8,6 +8,8 @@ AddChildIntent add {ChildName} to the logs
 AddChildIntent add {ChildName} to the record
 AddChildIntent add {ChildName} to the records
 
+AddSleepIntent {ChildName} slept
+AddSleepIntent {ChildName} napped
 AddSleepIntent {ChildName} went to sleep
 AddSleepIntent {ChildName} went to bed
 AddSleepIntent {ChildName} fell sleep
@@ -28,6 +30,7 @@ AddSleepIntent I just laid {ChildName} in bed
 AddSleepIntent {ChildName} went down for a nap
 AddSleepIntent {ChildName} went down to bed
 
+TellLastSleepIntent when did {ChildName} sleep
 TellLastSleepIntent when did {ChildName} go down
 TellLastSleepIntent when did {ChildName} go down for a nap
 TellLastSleepIntent when did {ChildName} go to sleep
@@ -205,8 +208,8 @@ DiaperIntent {ChildName} is getting a {DiaperType} diaper change
 DiaperIntent {ChildName} is having a {DiaperType} diaper change
 DiaperIntent {ChildName} is getting their {DiaperType} diaper changed
 DiaperIntent {ChildName} is having their {DiaperType} diaper changed
-DiaperIntent I am changing {ChildName}\'s {DiaperType} diaper
-DiaperIntent I just changed {ChildName}\'s {DiaperType} diaper
+DiaperIntent I am changing {ChildName} s {DiaperType} diaper
+DiaperIntent I just changed {ChildName} s {DiaperType} diaper
 DiaperIntent i just changed a {DiaperType} diaper for {ChildName}
 DiaperIntent i changed a {DiaperType} diaper for {ChildName}
 

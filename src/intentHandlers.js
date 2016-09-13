@@ -110,7 +110,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             var timeDifference = getTimeDifference(new Date(lastSleep), currentTime);
             var lastSleepTimePassed = formatTimeDifference(timeDifference);
 
-            speechOutput += childName + " went to sleep at " + lastSleepTime + ' ' + lastSleepTimePassed + ' ago. ';
+            speechOutput += childName + " went to sleep at " + lastSleepTime + '. ' + lastSleepTimePassed + ' ago. ';
 
             currentLogs.save(function () {
                 response.tell(speechOutput);
@@ -151,7 +151,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             var timeDifference = getTimeDifference(new Date(lastWake), currentTime);
             var lastWakeTimePassed = formatTimeDifference(timeDifference);
 
-            speechOutput += childName + " woke up at " + lastWakeTime + ' ' + lastWakeTimePassed + ' ago. ';
+            speechOutput += childName + " woke up at " + lastWakeTime + '. ' + lastWakeTimePassed + ' ago. ';
 
             currentLogs.save(function () {
                 response.tell(speechOutput);
@@ -249,7 +249,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           var timePassed = getTimeDifference(new Date(lastSleep), currentTime);
           var sleepTimePassed = formatTimeDifference(timePassed);
 
-          speechOutput += childName + " woke up at " + formatTime(currentTime) + ' sleeping for ' + sleepTimePassed + '. ';
+          speechOutput += childName + " woke up at " + formatTime(currentTime) + '. Sleeping for ' + sleepTimePassed + '. ';
 
           currentLogs.save(function () {
               response.tell(speechOutput);
@@ -438,7 +438,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
     intentHandlers.DiaperIntent = function (intent, session, response) {
         //log when a child goes down for a nap, ask additional question if slot values are missing.
         var childName = intent.slots.ChildName.value;
-        var DiaperType = intent.slots.DiaperType.value;
+        var diaperType = intent.slots.DiaperType.value;
         // var feedingAmount = intent.slots.FeedingAmount.value;
         if (!childName) {
             response.ask('sorry, I did not hear the child\'s name, please say that again', 'Please say the name again');
@@ -462,16 +462,16 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             }
 
             newDiaperArray[0] = currentTime;
-            if (DiaperType && DiaperType == "poopy"){
+            if (diaperType && (diaperType === "poopy")){
               newDiaperArray[1] = 1;
             } else {
               newDiaperArray[1] = 0;
             }
-            currentLogs.data.diapers[childName][currentIndex] = [];
+            // currentLogs.data.diapers[childName][currentIndex] = [];
             currentLogs.data.diapers[childName][currentIndex] = newDiaperArray;
 
             speechOutput += childName + " had a ";
-            if(DiaperType && DiaperType == "poopy"){
+            if(diaperType && (diaperType === "poopy")){
               speechOutput += "poopy";
             } else {
               speechOutput += "wet";
@@ -489,7 +489,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
     intentHandlers.HowManyDiapersIntent = function (intent, session, response) {
       //get slot values, ask additional question if slot values are missing.
       var childName = intent.slots.ChildName.value;
-      var DiaperType = intent.slots.DiaperType.value;
+      var diaperType = intent.slots.DiaperType.value;
       if (!childName) {
           response.ask('sorry, I did not hear the child\'s name, please say that again', 'Please say the name again');
           return;
@@ -505,7 +505,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           }
           //check for dirty diaper logs from DB, if no data return to user
           if (!currentLogs.data.diapers || !currentLogs.data.diapers[childName] || !currentLogs.data.diapers[childName][0]) {
-              response.ask('Sorry, I do not have any feedings logged for ' + childName + '. What would you like to do?', childName + ' does not have any feedings logged. What would you like to do?');
+              response.ask('Sorry, I do not have any diapers logged for ' + childName + '. What would you like to do?', childName + ' does not have any diapers logged. What would you like to do?');
               return;
           }
           //store arrray of diaper logs for child and get last logged diaper object
@@ -516,7 +516,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           while (currentIndex >= 0){
               var loggedDiaperDate = new Date(myChildLogs[currentIndex][0]);
               if (withinLastDay(loggedDiaperDate)){
-                if (myChildLogs[1] === 1) {
+                if (myChildLogs[currentIndex][1] === 1) {
                   poopyCount += 1;
                 } else {
                   wetCount += 1;
