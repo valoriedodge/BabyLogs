@@ -194,3 +194,23 @@ StopFeedingIntent {ChildName} is not nursing anymore
 StopFeedingIntent {ChildName} is not drinking anymore
 StopFeedingIntent I am done feeding {ChildName}
 StopFeedingIntent I am done nursing {ChildName}
+
+DiaperIntent I am changing {ChildName}
+DiaperIntent I just changed {ChildName}
+DiaperIntent {ChildName} had a {DiaperType} diaper
+DiaperIntent {ChildName} just had a {DiaperType} diaper
+DiaperIntent {ChildName} had a {DiaperType} diaper change
+DiaperIntent {ChildName} just had a {DiaperType} diaper change
+DiaperIntent {ChildName} is getting a {DiaperType} diaper change
+DiaperIntent {ChildName} is having a {DiaperType} diaper change
+DiaperIntent {ChildName} is getting their {DiaperType} diaper changed
+DiaperIntent {ChildName} is having their {DiaperType} diaper changed
+DiaperIntent I am changing {ChildName}\'s {DiaperType} diaper
+DiaperIntent I just changed {ChildName}\'s {DiaperType} diaper
+DiaperIntent i just changed a {DiaperType} diaper for {ChildName}
+DiaperIntent i changed a {DiaperType} diaper for {ChildName}
+
+HowManyDiapersIntent how many {DiaperType} diapers has {ChildName} had
+HowManyDiapersIntent how many {DiaperType} diapers has {ChildName} had today
+HowManyDiapersIntent how many {DiaperType} diapers has {ChildName} had so far
+HowManyDiapersIntent how many {DiaperType} diapers have I changed for {ChildName}

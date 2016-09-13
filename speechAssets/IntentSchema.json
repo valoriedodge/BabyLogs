@@ -95,6 +95,32 @@
       ]
     },
     {
+      "intent": "DiaperIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        },
+        {
+          "name": "DiaperType",
+          "type": "DIAPER_TYPE"
+        }
+      ]
+    },
+    {
+      "intent": "HowManyDiapersIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        },
+        {
+          "name": "DiaperType",
+          "type": "DIAPER_TYPE"
+        }
+      ]
+    },
+    {
       "intent": "LastNapInfoIntent"
     },
     {

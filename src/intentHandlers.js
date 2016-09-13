@@ -11,6 +11,7 @@ var textHelper = require('./textHelper'),
     storage = require('./storage');
 
 var registerIntentHandlers = function (intentHandlers, skillContext) {
+    //Keep an array of the children to keep logs for, to avoid mis-recognition when adding activity
     intentHandlers.AddChildIntent = function (intent, session, response) {
         //add a child to keep logs of daily activities
         var newChildName = intent.slots.ChildName.value;
@@ -42,7 +43,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             });
         });
     };
-
+    //Log what time a child goes down for a nap or down to bed
     intentHandlers.AddSleepIntent = function (intent, session, response) {
         //log when a child goes down for a nap, ask additional question if slot values are missing.
         var childName = intent.slots.ChildName.value;
@@ -77,7 +78,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             });
         });
     };
-
+    //Tell last time a child has a record for going to sleep (whether they are still sleeping or not)
     intentHandlers.TellLastSleepIntent = function (intent, session, response) {
         //log when a child goes down for a nap, ask additional question if slot values are missing.
         var childName = intent.slots.ChildName.value;
@@ -91,7 +92,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             //check to see if child's name has been added to account
             //if not currently in account return to user to avoid multiple mis-entries
             if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
-                response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
+                response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
                 return;
             }
             //check for sleep activity from DB, if no data return to user
@@ -116,7 +117,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             });
         });
     };
-
+    //Tell last time a child woke up for the last sleep record
     intentHandlers.TellLastWakeIntent = function (intent, session, response) {
         //log when a child goes down for a nap, ask additional question if slot values are missing.
         var childName = intent.slots.ChildName.value;
@@ -130,7 +131,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             //check to see if child's name has been added to account
             //if not currently in account return to user to avoid multiple mis-entries
             if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
-                response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
+                response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
                 return;
             }
             //check for sleep activity from DB, if no data return to user
@@ -146,7 +147,6 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
                 return;
             }
             lastWake = currentLogs.data.naps[childName][currentIndex][1];
-            // console.log(lastSleep);
             var lastWakeTime = formatTime(new Date(lastWake));
             var timeDifference = getTimeDifference(new Date(lastWake), currentTime);
             var lastWakeTimePassed = formatTimeDifference(timeDifference);
@@ -158,7 +158,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             });
         });
     };
-
+    //Tell how long a child slept for the last sleep record (only if sleep and wake time were both recorded)
     intentHandlers.HowLongAsleepIntent = function (intent, session, response) {
       //log when a child goes down for a nap, ask additional question if slot values are missing.
       var childName = intent.slots.ChildName.value;
@@ -172,7 +172,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           //check to see if child's name has been added to account
           //if not currently in account return to user to avoid multiple mis-entries
           if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
-              response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
+              response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
               return;
           }
           //check for sleep activity from DB, if no data return to user
@@ -204,7 +204,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           });
        });
     };
-
+    //Add when a child wakes up to last sleep record
     intentHandlers.WakeUpIntent = function (intent, session, response) {
       //log when a child goes down for a nap, ask additional question if slot values are missing.
       var childName = intent.slots.ChildName.value;
@@ -218,7 +218,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           //check to see if child's name has been added to account
           //if not currently in account return to user to avoid multiple mis-entries
           if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
-              response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
+              response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
               return;
           }
           //check for sleep activity from DB, if no data return to user
@@ -244,7 +244,6 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           }
 
           //Set current time as wake time in nap array
-
           currentLogs.data.naps[childName][currentIndex][1] = currentTime;
           lastSleep = currentLogs.data.naps[childName][currentIndex][0];
           var timePassed = getTimeDifference(new Date(lastSleep), currentTime);
@@ -257,6 +256,8 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           });
        });
     };
+
+    //Add a record for time of feeding
     intentHandlers.AddFeedingIntent = function (intent, session, response) {
         //log when a child goes down for a nap, ask additional question if slot values are missing.
         var childName = intent.slots.ChildName.value;
@@ -295,7 +296,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             });
         });
     };
-
+    //Return time of last feeding record
     intentHandlers.TellLastFeedingIntent = function (intent, session, response) {
         //log when a child goes down for a nap, ask additional question if slot values are missing.
         var childName = intent.slots.ChildName.value;
@@ -309,7 +310,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             //check to see if child's name has been added to account
             //if not currently in account return to user to avoid multiple mis-entries
             if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
-                response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
+                response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
                 return;
             }
             //check for feeding activity from DB, if no data return to user
@@ -334,7 +335,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             });
         });
     };
-
+    //Return how long from last recorded feeding
     intentHandlers.HowLongFeedingIntent = function (intent, session, response) {
       //log when a child goes down for a nap, ask additional question if slot values are missing.
       var childName = intent.slots.ChildName.value;
@@ -348,7 +349,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           //check to see if child's name has been added to account
           //if not currently in account return to user to avoid multiple mis-entries
           if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
-              response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
+              response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
               return;
           }
           //check for feeding activity from DB, if no data return to user
@@ -380,7 +381,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           });
        });
     };
-
+    //Log stop time for feeding
     intentHandlers.StopFeedingIntent = function (intent, session, response) {
       //log when a child goes down for a nap, ask additional question if slot values are missing.
       var childName = intent.slots.ChildName.value;
@@ -394,7 +395,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           //check to see if child's name has been added to account
           //if not currently in account return to user to avoid multiple mis-entries
           if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
-              response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your log files. What would you like to do?');
+              response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
               return;
           }
           //check for feeding activity from DB, if no data return to user
@@ -433,13 +434,123 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           });
        });
     };
+    //Create a record for a dirty diaper
+    intentHandlers.DiaperIntent = function (intent, session, response) {
+        //log when a child goes down for a nap, ask additional question if slot values are missing.
+        var childName = intent.slots.ChildName.value;
+        var DiaperType = intent.slots.DiaperType.value;
+        // var feedingAmount = intent.slots.FeedingAmount.value;
+        if (!childName) {
+            response.ask('sorry, I did not hear the child\'s name, please say that again', 'Please say the name again');
+            return;
+        }
 
-    // intentHandlers.ResetPlayersIntent = function (intent, session, response) {
-    //     //remove all players
-    //     storage.newGame(session).save(function () {
-    //         response.ask('New game started without players, who do you want to add first?', 'Who do you want to add first?');
-    //     });
-    // };
+        storage.loadLogs(session, function (currentLogs) {
+            var speechOutput = '', currentTime = new Date(), newDiaperArray = [], currentIndex;
+            //check to see if child's name has been added to account
+            //if not currently in account return to user to avoid multiple mis-entries
+            if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
+                response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
+                return;
+            }
+
+            if (!currentLogs.data.diapers[childName]) {
+                currentLogs.data.diapers[childName] = [];
+                currentIndex = 0;
+            } else {
+                currentIndex = currentLogs.data.diapers[childName].length;
+            }
+
+            newDiaperArray[0] = currentTime;
+            if (DiaperType && DiaperType == "poopy"){
+              newDiaperArray[1] = 1;
+            } else {
+              newDiaperArray[1] = 0;
+            }
+            currentLogs.data.diapers[childName][currentIndex] = [];
+            currentLogs.data.diapers[childName][currentIndex] = newDiaperArray;
+
+            speechOutput += childName + " had a ";
+            if(DiaperType && DiaperType == "poopy"){
+              speechOutput += "poopy";
+            } else {
+              speechOutput += "wet";
+            }
+            speechOutput += " diaper at " + formatTime(currentTime) + ' added. ';
+            if (currentLogs.data.diapers[childName].length < 2) {
+                speechOutput += 'You can specify between poopy and wet diapers by saying: ' + childName + ' had a poopy diaper. Or ' + childName + ' had a wet diaper. The default is a wet diaper. ';
+            }
+            currentLogs.save(function () {
+                response.tell(speechOutput);
+            });
+        });
+    };
+    //Return how many dirty diapers recorded in the past twenty-four hours
+    intentHandlers.HowManyDiapersIntent = function (intent, session, response) {
+      //get slot values, ask additional question if slot values are missing.
+      var childName = intent.slots.ChildName.value;
+      var DiaperType = intent.slots.DiaperType.value;
+      if (!childName) {
+          response.ask('sorry, I did not hear the child\'s name, please say that again', 'Please say the name again');
+          return;
+      }
+
+      storage.loadLogs(session, function (currentLogs) {
+          var speechOutput = '', currentTime = new Date(), currentIndex, today = true, poopyCount = 0, wetCount = 0;
+          //check to see if child's name has been added to account
+          //if not currently in account return to user to avoid multiple mis-entries
+          if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
+              response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
+              return;
+          }
+          //check for dirty diaper logs from DB, if no data return to user
+          if (!currentLogs.data.diapers || !currentLogs.data.diapers[childName] || !currentLogs.data.diapers[childName][0]) {
+              response.ask('Sorry, I do not have any feedings logged for ' + childName + '. What would you like to do?', childName + ' does not have any feedings logged. What would you like to do?');
+              return;
+          }
+          //store arrray of diaper logs for child and get last logged diaper object
+          var myChildLogs = currentLogs.data.diapers[childName];
+          currentIndex = myChildLogs.length - 1;
+
+          //Count how many entries within the last 24 hours are wet and how many are poopy
+          while (currentIndex >= 0){
+              var loggedDiaperDate = new Date(myChildLogs[currentIndex][0]);
+              if (withinLastDay(loggedDiaperDate)){
+                if (myChildLogs[1] === 1) {
+                  poopyCount += 1;
+                } else {
+                  wetCount += 1;
+                }
+                currentIndex -= 1;
+              } else {
+                currentIndex = -1;
+              }
+          }
+          speechOutput += childName + " has had ";
+          if (poopyCount > 0) {
+            speechOutput += poopyCount + " poopy diaper";
+            if (poopyCount > 1){
+              speechOutput += "s";
+            }
+          }
+          if (poopyCount > 0 && wetCount > 0) {
+            speechOutput += " and ";
+          } else if (poopyCount === 0 && wetCount === 0) {
+            speechOutput += " no dirty diapers";
+          }
+          if (wetCount > 0) {
+            speechOutput += wetCount + " wet diaper";
+            if (wetCount > 1){
+              speechOutput += "s";
+            }
+          }
+          speechOutput += " recorded in the last twenty-four hours.";
+
+          currentLogs.save(function () {
+              response.tell(speechOutput);
+          });
+       });
+    };
 
     intentHandlers['AMAZON.HelpIntent'] = function (intent, session, response) {
         var speechOutput = textHelper.completeHelp;
@@ -527,6 +638,41 @@ function formatDate(mydate) {
   var day = mydate.getDate();
   var year = mydate.getFullYear();
   return year + "/" + month + "/" + day;
+}
+
+//Check to see if the input value for child name is valid
+//returns true if the input value is found
+// function checkForChildName(name, response) {
+//   if (!name) {
+//       response.ask('sorry, I did not hear the child\'s name, please say that again', 'Please say the name again');
+//       return true;
+//   } else {
+//       return false;
+//   }
+// }
+
+//check to see if child name has already been added to logs to avoid inadvertantly logging activity under two names
+//returns true if child name is not found
+// function checkForChildName(currentLogs, childName, response) {
+//   if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
+//       response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
+//       return true;
+//   } else {
+//       return false;
+//   }
+// }
+
+//returns true if the given date is within the last twenty-four hours
+function withinLastDay(checkDate) {
+  var second=1000, minute=second*60, hour=minute*60, day=hour*24;
+  var today = new Date();
+  var timediff = today - checkDate;
+  if (isNaN(timediff)) return NaN;
+  if (timediff < day) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 
