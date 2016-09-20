@@ -8,7 +8,14 @@
 
 'use strict';
 var textHelper = require('./textHelper'),
-    storage = require('./storage');
+    storage = require('./storage'),
+    express = require('express'),
+    request = require('request');
+
+var app = express();
+
+var GA_TRACKING_ID = 'UA-83204288-2';
+
 
 var registerIntentHandlers = function (intentHandlers, skillContext) {
     //Keep an array of the children to keep logs for, to avoid mis-recognition when adding activity
@@ -37,12 +44,59 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             }
             speechOutput = newChildName + ' has been added to your logs. ';
             currentLogs.data.names.push(newChildName);
-
+            trackEvent(
+              'Intent',
+              'AddChildIntent',
+              'na',
+              '100', // Event value must be numeric.
+              function(err) {
+                if (err) {
+                    var speechOutput = err;
+                    response.tell(speechOutput);
+                }
+              });
             currentLogs.save(function () {
                 response.ask(speechOutput + "Would you like to log anything else?", reprompt);
             });
         });
     };
+
+    //Remove a child's name for array
+    intentHandlers.RemoveChildIntent = function (intent, session, response) {
+        var childName = intent.slots.ChildName.value;
+        if (!childName) {
+            response.ask('sorry, I did not hear the child\'s name, please say that again', 'Please say the name again');
+            return;
+        }
+
+        storage.loadLogs(session, function (currentLogs) {
+            var speechOutput = '', currentTime = new Date(), index;
+            //check to see if child's name has been added to account
+            //if not currently in account return to user
+            if (!currentLogs.data.names || !currentLogs.hasName(childName)) {
+                response.ask('Sorry, ' + childName + ' has not been added to your log files. What would you like to do?', childName + ' has not been added to your logs. What would you like to do?');
+                return;
+            }
+            index = currentLogs.data.names.indexOf(childName);
+            currentLogs.data.names.splice(index, 1);
+            speechOutput += childName + "has been removed from your logs."
+            trackEvent(
+              'Intent',
+              'RemoveChildIntent',
+              'na',
+              '100', // Event value must be numeric.
+              function(err) {
+                if (err) {
+                    var speechOutput = err;
+                    response.tell(speechOutput);
+                }
+              });
+            currentLogs.save(function () {
+                response.tell(speechOutput);
+            });
+        });
+    };
+
     //Log what time a child goes down for a nap or down to bed
     intentHandlers.AddSleepIntent = function (intent, session, response) {
         //log when a child goes down for a nap, ask additional question if slot values are missing.
@@ -72,7 +126,17 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             }
 
             speechOutput += childName + " went to sleep at " + formatTime(currentTime) + ' has been added. You can also log when ' + childName + ' wakes up to track the length of the sleep time. ';
-
+            trackEvent(
+              'Intent',
+              'AddSleepIntent',
+              'na',
+              '100', // Event value must be numeric.
+              function(err) {
+                if (err) {
+                    var speechOutput = err;
+                    response.tell(speechOutput);
+                }
+              });
             currentLogs.save(function () {
                 response.tell(speechOutput);
             });
@@ -111,7 +175,17 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             var lastSleepTimePassed = formatTimeDifference(timeDifference);
 
             speechOutput += childName + " went to sleep at " + lastSleepTime + '. ' + lastSleepTimePassed + ' ago. ';
-
+            trackEvent(
+              'Intent',
+              'TellLastSleepIntent',
+              'na',
+              '100', // Event value must be numeric.
+              function(err) {
+                if (err) {
+                    var speechOutput = err;
+                    response.tell(speechOutput);
+                }
+              });
             currentLogs.save(function () {
                 response.tell(speechOutput);
             });
@@ -152,7 +226,17 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             var lastWakeTimePassed = formatTimeDifference(timeDifference);
 
             speechOutput += childName + " woke up at " + lastWakeTime + '. ' + lastWakeTimePassed + ' ago. ';
-
+            trackEvent(
+              'Intent',
+              'TellLastWakeIntent',
+              'na',
+              '100', // Event value must be numeric.
+              function(err) {
+                if (err) {
+                    var speechOutput = err;
+                    response.tell(speechOutput);
+                }
+              });
             currentLogs.save(function () {
                 response.tell(speechOutput);
             });
@@ -198,7 +282,17 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           var sleepTimePassed = formatTimeDifference(timePassed);
 
           speechOutput += childName + ' slept for ' + sleepTimePassed + '. ';
-
+          trackEvent(
+            'Intent',
+            'HowLongAsleepIntent',
+            'na',
+            '100', // Event value must be numeric.
+            function(err) {
+              if (err) {
+                  var speechOutput = err;
+                  response.tell(speechOutput);
+              }
+            });
           currentLogs.save(function () {
               response.tell(speechOutput);
           });
@@ -250,12 +344,23 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           var sleepTimePassed = formatTimeDifference(timePassed);
 
           speechOutput += childName + " woke up at " + formatTime(currentTime) + '. Sleeping for ' + sleepTimePassed + '. ';
-
+          trackEvent(
+            'Intent',
+            'WakeUpIntent',
+            'na',
+            '100', // Event value must be numeric.
+            function(err) {
+              if (err) {
+                  var speechOutput = err;
+                  response.tell(speechOutput);
+              }
+            });
           currentLogs.save(function () {
               response.tell(speechOutput);
           });
        });
     };
+
 
     //Add a record for time of feeding
     intentHandlers.AddFeedingIntent = function (intent, session, response) {
@@ -291,6 +396,17 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             if (currentLogs.data.feedings[childName].length < 2) {
                 speechOutput += 'If you are nursing, you can also log when ' + childName + ' stops eating to track the length of the feeding time. ';
             }
+            trackEvent(
+              'Intent',
+              'AddFeedingIntent',
+              'na',
+              '100', // Event value must be numeric.
+              function(err) {
+                if (err) {
+                    var speechOutput = err;
+                    response.tell(speechOutput);
+                }
+              });
             currentLogs.save(function () {
                 response.tell(speechOutput);
             });
@@ -329,7 +445,17 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             var lastFeedingTimePassed = formatTimeDifference(timeDifference);
 
             speechOutput += childName + " ate at " + lastFeedingTime + ' ' + lastFeedingTimePassed + ' ago. ';
-
+            trackEvent(
+              'Intent',
+              'TellLastFeedingIntent',
+              'na',
+              '100', // Event value must be numeric.
+              function(err) {
+                if (err) {
+                    var speechOutput = err;
+                    response.tell(speechOutput);
+                }
+              });
             currentLogs.save(function () {
                 response.tell(speechOutput);
             });
@@ -375,7 +501,17 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           var feedingTimePassed = formatTimeDifference(timePassed);
 
           speechOutput += childName + ' ate for ' + feedingTimePassed + ' at ' + formatTime(new Date(lastFeeding));
-
+          trackEvent(
+            'Intent',
+            'HowLongFeedingIntent',
+            'na',
+            '100', // Event value must be numeric.
+            function(err) {
+              if (err) {
+                  var speechOutput = err;
+                  response.tell(speechOutput);
+              }
+            });
           currentLogs.save(function () {
               response.tell(speechOutput);
           });
@@ -428,7 +564,17 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
           var feedingTimePassed = formatTimeDifference(timePassed);
 
           speechOutput += childName + " woke up at " + formatTime(currentTime) + ' eating for ' + feedingTimePassed + '. ';
-
+          trackEvent(
+            'Intent',
+            'StopFeedingIntent',
+            'na',
+            '100', // Event value must be numeric.
+            function(err) {
+              if (err) {
+                  var speechOutput = err;
+                  response.tell(speechOutput);
+              }
+            });
           currentLogs.save(function () {
               response.tell(speechOutput);
           });
@@ -480,6 +626,17 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             if (currentLogs.data.diapers[childName].length < 2) {
                 speechOutput += 'You can specify between poopy and wet diapers by saying: ' + childName + ' had a poopy diaper. Or ' + childName + ' had a wet diaper. The default is a wet diaper. ';
             }
+            trackEvent(
+              'Intent',
+              'DiaperIntent',
+              'na',
+              '100', // Event value must be numeric.
+              function(err) {
+                if (err) {
+                    var speechOutput = err;
+                    response.tell(speechOutput);
+                }
+              });
             currentLogs.save(function () {
                 response.tell(speechOutput);
             });
@@ -545,11 +702,39 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             }
           }
           speechOutput += " recorded in the last twenty-four hours.";
-
+          trackEvent(
+            'Intent',
+            'HowManyDiapersIntent',
+            'na',
+            '100', // Event value must be numeric.
+            function(err) {
+              if (err) {
+                  var speechOutput = err;
+                  response.tell(speechOutput);
+              }
+            });
           currentLogs.save(function () {
               response.tell(speechOutput);
           });
        });
+    };
+
+    intentHandlers.ClearAllLogsIntent = function (intent, session, response) {
+        //remove due date
+        storage.newLogs(session).save(function () {
+            trackEvent(
+              'Intent',
+              'ClearAllLogsIntent',
+              'na',
+              '100', // Event value must be numeric.
+              function(err) {
+                if (err) {
+                    var speechOutput = err;
+                    response.tell(speechOutput);
+                }
+              });
+            response.tell('All records have been removed.');
+        });
     };
 
     intentHandlers['AMAZON.HelpIntent'] = function (intent, session, response) {
@@ -557,7 +742,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
         if (skillContext.needMoreHelp) {
             response.ask(textHelper.completeHelp + ' So, how can I help?', 'How can I help?');
         } else {
-            response.tell(textHelper.completeHelp);
+            response.ask(textHelper.completeHelp);
         }
     };
 
@@ -673,6 +858,35 @@ function withinLastDay(checkDate) {
   } else {
     return false;
   }
+}
+
+//Track events with google-analytics
+function trackEvent(category, action, label, value, callback) {
+  var data = {
+    v: '1', // API Version.
+    tid: GA_TRACKING_ID, // Tracking ID / Property ID.
+    // Anonymous Client Identifier. Ideally, this should be a UUID that
+    // is associated with particular user, device, or browser instance.
+    cid: '555',
+    t: 'event', // Event hit type.
+    ec: category, // Event category.
+    ea: action, // Event action.
+    el: label, // Event label.
+    ev: value, // Event value.
+  };
+
+  request.post(
+    'http://www.google-analytics.com/collect', {
+      form: data
+    },
+    function(err, response) {
+      if (err) { return callback(err); }
+      if (response.statusCode !== 200) {
+        return callback(new Error('Tracking failed'));
+      }
+      callback();
+    }
+  );
 }
 
 

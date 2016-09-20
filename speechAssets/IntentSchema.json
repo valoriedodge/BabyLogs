@@ -10,6 +10,15 @@
       ]
     },
     {
+      "intent": "RemoveChildIntent",
+      "slots": [
+        {
+          "name": "ChildName",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ]
+    },
+    {
       "intent": "AddSleepIntent",
       "slots": [
         {
@@ -121,7 +130,7 @@
       ]
     },
     {
-      "intent": "LastNapInfoIntent"
+      "intent": "ClearAllLogsIntent"
     },
     {
       "intent": "AMAZON.HelpIntent"

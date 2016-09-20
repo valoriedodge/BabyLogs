@@ -8,6 +8,24 @@ AddChildIntent add {ChildName} to the logs
 AddChildIntent add {ChildName} to the record
 AddChildIntent add {ChildName} to the records
 
+RemoveChildIntent remove {ChildName}
+RemoveChildIntent take off {ChildName}
+RemoveChildIntent remove child {ChildName}
+RemoveChildIntent remove baby {ChildName}
+RemoveChildIntent remove logs for {ChildName}
+RemoveChildIntent remove records for {ChildName}
+RemoveChildIntent remove {ChildName} from the logs
+RemoveChildIntent remove {ChildName} from the record
+RemoveChildIntent remove {ChildName} from the records
+RemoveChildIntent delete {ChildName}
+RemoveChildIntent delete child {ChildName}
+RemoveChildIntent delete baby {ChildName}
+RemoveChildIntent delete logs for {ChildName}
+RemoveChildIntent delete records for {ChildName}
+RemoveChildIntent delete {ChildName} from the logs
+RemoveChildIntent delete {ChildName} from the record
+RemoveChildIntent delete {ChildName} from the records
+
 AddSleepIntent {ChildName} slept
 AddSleepIntent {ChildName} napped
 AddSleepIntent {ChildName} went to sleep
@@ -217,3 +235,11 @@ HowManyDiapersIntent how many {DiaperType} diapers has {ChildName} had
 HowManyDiapersIntent how many {DiaperType} diapers has {ChildName} had today
 HowManyDiapersIntent how many {DiaperType} diapers has {ChildName} had so far
 HowManyDiapersIntent how many {DiaperType} diapers have I changed for {ChildName}
+
+ClearAllLogsIntent delete everything
+ClearAllLogsIntent delete all of the logs
+ClearAllLogsIntent remove all of the logs
+ClearAllLogsIntent clear all of the logs
+ClearAllLogsIntent clear all of the records
+ClearAllLogsIntent delete all of the records
+ClearAllLogsIntent remove all of the records
