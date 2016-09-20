@@ -206,6 +206,14 @@ StopFeedingIntent {ChildName} stopped drinking
 StopFeedingIntent {ChildName} stopped taking the bottle
 StopFeedingIntent {ChildName} stopped
 StopFeedingIntent {ChildName} is done
+StopFeedingIntent {ChildName} finished
+StopFeedingIntent {ChildName} just finished
+StopFeedingIntent {ChildName} finished eating
+StopFeedingIntent {ChildName} finished nursing
+StopFeedingIntent {ChildName} is finished eating
+StopFeedingIntent {ChildName} is finished nursing
+StopFeedingIntent {ChildName} just finished eating
+StopFeedingIntent {ChildName} just finished nursing
 StopFeedingIntent {ChildName} is done eating
 StopFeedingIntent {ChildName} is done nursing
 StopFeedingIntent {ChildName} is done taking the bottle

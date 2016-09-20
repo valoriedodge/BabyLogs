@@ -79,7 +79,7 @@ var registerIntentHandlers = function (intentHandlers, skillContext) {
             }
             index = currentLogs.data.names.indexOf(childName);
             currentLogs.data.names.splice(index, 1);
-            speechOutput += childName + "has been removed from your logs."
+            speechOutput += childName + " has been removed from your logs."
             trackEvent(
               'Intent',
               'RemoveChildIntent',

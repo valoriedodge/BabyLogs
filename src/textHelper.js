@@ -24,8 +24,13 @@ var textHelper = (function () {
         + ' how long was Mary\'s last nap?'
         + ' mary is eating.'
         + ' I am nursing mary.'
+        + ' Mary finished eating.'
+        + ' When did Mary eat last'
+        + ' Mary had a dirty diaper'
+        + ' Mary had a poopy diaper'
+        + ' How many dirty diapers has mary had'
         + ' and exit.',
-        nextHelp: 'You can add a child to track daily activities for, log when you put a child down for a nap, when they wake up, or when you feed them, or you can say help. What would you like?',
+        nextHelp: 'You can add a child to track daily activities for, log when you put a child down for a nap, when they wake up, when you feed them, or when they have a dirty diaper. You can also always say help. What would you like?',
 
         getChildName: function (recognizedName) {
             if (!recognizedName) {
