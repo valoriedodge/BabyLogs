@@ -1,5 +1,5 @@
 #Baby Logs
-##An Amazon Alexa Skill to track a baby's Eating and Sleeping, and or Dirty Diapers built with Node.js
+##An Amazon Alexa Skill to track a baby's Eating, Sleeping and/or Dirty Diapers built with ASK, AWS, and Node.js
 
 ![Baby Logs](src/BabyLogsSm.png)
 
